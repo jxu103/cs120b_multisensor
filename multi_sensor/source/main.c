@@ -8,7 +8,7 @@
  *	code, is my own original work.
  */
 #include <avr/io.h>
-#include "usart.h"
+#include "usart_ATmega1284.h"
 
 
 int main( void ){
