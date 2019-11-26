@@ -119,7 +119,7 @@ void USART_SendString(char *str,unsigned char usartNum)					/* Send string of US
 	int i=0;																	
 	while (str[i]!=0)
 	{
-		USART_Send(str[i],usartNum)						/* Send each char of string till the NULL */
+		USART_Send(str[i],usartNum);						/* Send each char of string till the NULL */
 		i++;
 	}
 }
