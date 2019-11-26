@@ -21,6 +21,10 @@ int main( void ){
 			temp = USART_Receive(0);
 			PORTC = temp;
 	   }
+	   if ( USART_IsSendReady(0) ) {
+		   USART_SendString("LED is On",0);
+	   }
+
 
 	}
 	return 0;
