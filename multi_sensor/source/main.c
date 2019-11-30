@@ -12,20 +12,20 @@
 
 
 int main( void ){
+	DDRD = 0xFE, PORTD = 0x01;
 	DDRC = 0xFF, PORTC = 0x00;
 
 	initUSART(0); // initializes USART0
 	unsigned char temp;
 	while (1) {
-		if ( USART_HasTransmitted(0) ) {
-			temp = USART_Receive(0);
-			PORTC = temp;
-	   }
-	   if ( USART_IsSendReady(0) ) {
-		   USART_SendString("LED is On",0);
-	   }
-
-
+		if ( USART_HasReceived(0) ) {
+                   temp = USART_Receive(0);
+                   USART_Flush(0);
+               }
+		if ( USART_IsSendReady(0) ) {
+   		   USART_Send('h', 0);
+                   while(!USART_HasTransmitted(0)){}
+               }
 	}
 	return 0;
 }
