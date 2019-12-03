@@ -17,10 +17,24 @@ int main( void ){
 	DDRC = 0xFF, PORTC = 0x00;
 
 	initUSART(0); // initializes USART0
-	unsigned char temp = 0x00;
+	unsigned char warningFlag = 0x00;
 	while (1) {
-		temp = USART_Receive(0);
-		PORTC = temp;
+		//receive warning info
+		if(USART_HasReceived(0)) {
+			warningFlag = USART_Receive(0);
+			USART_Flush(0);
+		}
+
+
+		/*
+		if bit 0 is set one, then low temperature (below 20C)
+		if bit 1 is set one, then high temperature (above 24C)
+		If bit 2 is set one, then low RH (below 20%)
+		if bit 3 is set one, then high RH (above 60%)
+		*/
+		PORTC = warningFlag;
+		
+		
 	}
 	return 0;
 }
