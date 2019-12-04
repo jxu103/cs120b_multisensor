@@ -11,6 +11,7 @@
 #include <util/delay.h>
 #include "usart_ATmega1284.h"
 #include "DHT.h"
+#include "io.h"
 
 uint16_t temperature_int = 0;
 uint16_t humidity_int = 0;
@@ -25,10 +26,18 @@ if bit 3 is set one, then high RH (above 60%)
 */
 unsigned char warningFlag = 0x00;
 
+void print_LCD(unsigned char temperature, unsigned char rh) {
+	LCD_DisplayString(1, "Current:           Temp:  . C    Humidity:    %");
+	LCD_DisplayString(9,temperature + '0');
+	
+}
+
 int main( void ){
-	DDRD = 0xFE, PORTD = 0x01;
+	DDRC = 0xFF; PORTC = 0x00;
+	DDRD = 0xFE; PORTD = 0x01;
 
 	initUSART(0); // initializes USART0
+	LCD_init();
 	
 	unsigned char temp;
 	while (1) {
@@ -38,6 +47,8 @@ int main( void ){
 			temperature = temperature_int / 10;
 			rh = humidity_int / 10;
 		}
+		
+		print_LCD(temperature,rh);
 
 		//check levels, output level and send out warnings if needed
 		warningFlag = 0x00;
