@@ -27,8 +27,8 @@ if bit 3 is set one, then high RH (above 60%)
 unsigned char warningFlag = 0x00;
 
 void print_LCD(unsigned char temperature, unsigned char rh) {
-	LCD_DisplayString(1, "Current:           Temp:  . C    Humidity:    %");
-	LCD_DisplayString(9,temperature + '0');
+	unsigned char* LCD_template = "Current:           Temp:  . C    Humidity:    %";
+	LCD_DisplayString(1, LCD_template);
 	
 }
 
