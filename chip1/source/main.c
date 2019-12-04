@@ -17,18 +17,8 @@ uint16_t temperature_int = 0;
 uint16_t humidity_int = 0;
 unsigned char temperature = 0x00;
 unsigned char rh = 0x00;
-unsigned char warningFlag = 0x00;
-
-unsigned short AD_convert = 0x0000;
-unsigned short MAX = 0x0000;
-
-void ADC_init(){
-    ADCSRA |= (1 << ADEN) | (1 << ADSC) | (1 << ADATE);
-}
 
 void print_LCD(uint16_t temperature, uint16_t rh) {
-	unsigned char* LCD_template = "Current:        Temp:  . C    Humidity:    %";
-	LCD_DisplayString(1, LCD_template);
 	
 	//print temperature
 	//print 10s
@@ -79,18 +69,15 @@ void print_LCD(uint16_t temperature, uint16_t rh) {
 }
 
 int main( void ){
-	DDRA = 0x00; PORTA = 0xFF;
 	DDRB = 0x00; PORTB = 0xFF;
-	DDRC = 0xFF; PORTC = 0x00;
 	DDRD = 0xFE; PORTD = 0x01;
 
 	initUSART(0); // initializes USART0
 	LCD_init();
-	ADC_init();
-	
-	unsigned char temp;
+	unsigned char* LCD_template = "Current:  Temp:  . C    Humidity:    %";
+	LCD_DisplayString(1, LCD_template);
+	_delay_ms(1000);
 	while (1) {
-        AD_convert = ADC;
         
 		//get temperature and humidity level
         if (dht_GetTempUtil(&temperature_int, &humidity_int) != -1) {
@@ -102,38 +89,9 @@ int main( void ){
 			LCD_ClearScreen();
 			LCD_DisplayString(1,"Sensor Error");
 		}
-
-		//check levels, output level and send out warnings if needed
-		/*
-		if bit 0 is set one, then low temperature (below 20C)
-		if bit 1 is set one, then high temperature (above 24C)
-		If bit 2 is set one, then low RH (below 20%)
-		if bit 3 is set one, then high RH (above 60%)
-		*/
-		warningFlag = 0x00;
-		if(temperature < 20 ) {
-			warningFlag = warningFlag | 0x01;
-		}
-		else if(temperature > 24) {
-			warningFlag = warningFlag | 0x02;
-		}
-
-		if(rh < 20) {
-			warningFlag = warningFlag | 0x04;
-		}
-		else if(rh > 60) {
-			warningFlag = warningFlag | 0x08;
-		}
-		
-		if(AD_convert < 0x0F) {
-			warningFlag |= 0x10;
-		}
-		
-        if(USART_IsSendReady(0)) {
-			USART_Send(warningFlag,0);
-			while(!USART_HasTransmitted(0));
-		}
+		_delay_ms(2000);
 		
 	}
 	return 0;
 }
+
