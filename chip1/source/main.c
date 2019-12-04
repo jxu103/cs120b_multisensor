@@ -91,7 +91,6 @@ int main( void ){
 	unsigned char temp;
 	while (1) {
         AD_convert = ADC;
-        if(AD_convert <= 0x0C7;
         
 		//get temperature and humidity level
         if (dht_GetTempUtil(&temperature_int, &humidity_int) != -1) {
@@ -113,17 +112,21 @@ int main( void ){
 		*/
 		warningFlag = 0x00;
 		if(temperature < 20 ) {
-			warningFlag = warningFlag || 0x01;
+			warningFlag = warningFlag | 0x01;
 		}
 		else if(temperature > 24) {
-			warningFlag = warningFlag || 0x02;
+			warningFlag = warningFlag | 0x02;
 		}
 
 		if(rh < 20) {
-			warningFlag = warningFlag || 0x04;
+			warningFlag = warningFlag | 0x04;
 		}
 		else if(rh > 60) {
-			warningFlag = warningFlag || 0x08;
+			warningFlag = warningFlag | 0x08;
+		}
+		
+		if(AD_convert < 0x0F) {
+			warningFlag |= 0x10;
 		}
 		
         if(USART_IsSendReady(0)) {

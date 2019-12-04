@@ -59,7 +59,7 @@ int main( void ){
 		*/
 		PORTC = warningFlag;
 		
-		if(warningFlag & 0x01 == 0x01) {
+		if(warningFlag & 0x10 == 0x10) {
 			PWM_on();
 			set_PWM(261.63);
 		}
