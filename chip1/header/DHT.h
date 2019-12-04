@@ -22,7 +22,7 @@
 //Define sensor type
 #define DHT_DHT11 0
 #define DHT_DHT22 1
-#define DHT_TYPE DHT_DHT22
+#define DHT_TYPE DHT_DHT11
 
 //timeout retries
 #define DHT_TIMEOUT 200
